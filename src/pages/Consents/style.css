@@ -1,0 +1,62 @@
+td {
+  display: inline-block;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  padding: 12px;
+}
+
+table th {
+  padding: 12px;
+}
+
+table.table .column-given .btn-only-icon {
+  width: 60px;
+  height: 60px;
+}
+
+.table-head th {
+  font-size: 16px;
+  color: var(--text-color);
+  font-weight: 500;
+  padding-bottom: 12px;
+}
+
+.column-detail {
+  width: 60%;
+  text-align: left;
+}
+
+.column-given,
+.column-consent {
+  text-align: center;
+  width: 20%;
+}
+
+.column-given button {
+  margin: 0 auto;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #f2f2f2;
+}
+
+.table-text-name {
+  color: var(--text-color);
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.table-text-language {
+  color: #bbbbbb;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.consents-empty {
+  color: var(--text-color);
+  text-align: center;
+  width: 100%;
+}

@@ -1,0 +1,45 @@
+.btn {
+  background-color: var(--bg-color);
+  border: none;
+  font-size: 16px;
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+.btn-icon {
+  display: flex;
+  align-items: center;
+  padding: 8px 24px;
+  gap: 12px;
+}
+
+.btn-icon svg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+}
+
+.btn-icon svg path {
+  stroke: var(--text-color);
+}
+
+.btn-only-icon {
+  border-radius: 50%;
+  height: 80px;
+  width: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-only-icon svg {
+  width: 30px;
+  height: 30px;
+}
+
+.btn-only-icon svg path {
+  stroke: var(--text-color);
+  fill: var(--text-color) !important;
+}

@@ -1,0 +1,23 @@
+.wrapper-header {
+  height: 100px;
+  line-height: 100px;
+}
+
+.wrapper-header-menu {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 48px;
+}
+
+.wrapper-header-menu a {
+  font-size: 20px;
+}
+
+.menu-item-link-active {
+  color: var(--text-color);
+}
+
+.menu-item-link {
+  color: var(--inactive-color);
+}
