@@ -1,30 +1,31 @@
-import { createSlice } from '@reduxjs/toolkit'
-//current
 const consents = JSON.parse(localStorage.getItem('consents'))
 const language = JSON.parse(localStorage.getItem('language'))
 
-const consentsSlice = createSlice({
-  name: 'consents',
-  initialState: {
-    listConsents: consents || [],
-    language: language || {}
-  },
-  reducers: {
-    chooseLanguage: (state, action) => {
-      state.language = action.payload
+const initialState = {
+  listConsents: consents || [],
+  language: language || {}
+}
+export default function consentsSlice(state = initialState, action) {
+  switch (action.type) {
+    case 'CHOOSE_LANGUAGE': {
       localStorage.setItem('language', JSON.stringify(action.payload))
-    },
-
-    addConsent: (state, action) => {
-      const res = [...state.listConsents, { ...action.payload }]
-      state.listConsents = res
-      localStorage.setItem('consents', JSON.stringify(res))
+      return {
+        ...state,
+        language: action.payload
+      }
     }
-  },
 
-  extraReducers: {}
-})
+    case 'ADD_CONSENT': {
+      const res = [...state.listConsents, { ...action.payload }]
+      localStorage.setItem('consents', JSON.stringify(res))
+      return {
+        ...state,
+        listConsents: res
+      }
+    }
 
-export const { chooseLanguage, addConsent } = consentsSlice.actions
-
-export default consentsSlice.reducer
+    default: {
+      return state
+    }
+  }
+}

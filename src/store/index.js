@@ -1,15 +1,6 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { combineReducers } from 'redux'
 import consentsSlice from './consents/consent.reducer'
 
-const store = configureStore({
-  reducer: {
-    consentsSlice
-  },
-  devTools: true,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false
-    })
+export default combineReducers({
+  consentsSlice: consentsSlice
 })
-
-export default store
