@@ -2,35 +2,59 @@ import React, { useState } from 'react'
 import { IconMic } from 'assets'
 import Button from 'components/Button'
 import { useTranslation } from 'react-i18next'
-import SpeechRecognition, {
-  useSpeechRecognition
-} from 'react-speech-recognition'
-import { IconArrowRight, IconPause, IconPlay, IconReplay } from 'assets/index'
+import { IconArrowRight, IconPause, IconPlay, IconReplay } from 'assets'
 import Success from './Success'
 import { useDispatch } from 'react-redux'
-import { addConsent } from 'store/consents/consent.reducer'
+import { addConsent } from 'store/consents/consent.action'
+import { useSelector } from 'react-redux'
 
 const TIME_END_SPEECH = 4000
 
 function Consent({ speaking, speak, valueForm }) {
   const dispatch = useDispatch()
   const { t } = useTranslation('home')
+  const language = useSelector((state) => state.consentsSlice.language)
   const [openMic, setOpenMic] = useState(false)
   const [isSave, setIsSave] = useState(false)
-  const { transcript } = useSpeechRecognition()
+  const [transcript, setTranscript] = useState('')
+
+  const recognition = new (window.SpeechRecognition ||
+    window.webkitSpeechRecognition)()
+
+  recognition.lang = language || 'en-US'
+  recognition.interimResults = false
+  recognition.maxAlternatives = 1
+
+  recognition.onresult = (event) => {
+    const result = event.results[0][0].transcript
+    setTranscript(result)
+  }
+
+  const startListening = () => {
+    if (!speaking) {
+      recognition.start()
+    }
+  }
+
+  // const stopListening = () => {
+  //   recognition.stop()
+  // }
 
   const handleSpeech = async () => {
-    if (!openMic) {
-      await SpeechRecognition.startListening()
-      setTimeout(() => {
-        setOpenMic(true)
-      }, TIME_END_SPEECH)
-    } else {
-      setOpenMic(false)
-      await SpeechRecognition.startListening()
-      setTimeout(() => {
-        setOpenMic(true)
-      }, TIME_END_SPEECH)
+    if (!speaking) {
+      if (!openMic) {
+        startListening()
+        setTimeout(() => {
+          setOpenMic(true)
+        }, TIME_END_SPEECH)
+      } else {
+        setOpenMic(false)
+        setTranscript('')
+        startListening()
+        setTimeout(() => {
+          setOpenMic(true)
+        }, TIME_END_SPEECH)
+      }
     }
   }
 
@@ -63,7 +87,11 @@ function Consent({ speaking, speak, valueForm }) {
                   icon={!speaking ? <IconPause /> : <IconPlay />}
                   onlyIcon
                   onClick={() => {
-                    speak({ text: transcript })
+                    if (transcript.length > 0) {
+                      speak(transcript)
+                    } else {
+                      return false
+                    }
                   }}
                 />
                 {transcript.length > 0 ? (

@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { locales } from 'i18n/i18n'
-import { IconArrowRight } from 'assets/index'
+import { IconArrowRight } from 'assets'
 import { useDispatch } from 'react-redux'
 import Button from 'components/Button'
-import { chooseLanguage } from 'store/consents/consent.reducer'
-import { useSpeechSynthesis } from 'react-speech-kit'
 import Consent from './Consent'
+import { chooseLanguage } from 'store/consents/consent.action'
 
 function Form() {
   const dispatch = useDispatch()
   const { i18n } = useTranslation('home')
-  const { speak, speaking } = useSpeechSynthesis()
+  const [speaking, setSpeaking] = useState(false)
   const { t } = useTranslation('home')
 
   const [isOpenConsent, setIsOpenConsent] = useState()
@@ -20,9 +19,19 @@ function Form() {
     language: ''
   })
 
+  const speak = (str) => {
+    setSpeaking(true)
+    const utterance = new SpeechSynthesisUtterance(str)
+    utterance.onend = () => {
+      // alert('Audio playback finished.')
+      setSpeaking(false)
+    }
+    window.speechSynthesis.speak(utterance)
+  }
+
   useEffect(() => {
     if (isOpenConsent) {
-      speak({ text: t('content') + '    ' + t('question') })
+      speak(t('content') + '    ' + t('question'))
     }
   }, [isOpenConsent, t])
 
@@ -63,6 +72,7 @@ function Form() {
     }
 
     if (isValid) {
+      // dispatch(chooseLanguage(valueForm.language))
       dispatch(chooseLanguage(valueForm.language))
       setIsOpenConsent(true)
     } else {
@@ -133,6 +143,7 @@ function Form() {
       )}
       {isOpenConsent && (
         <Consent speaking={speaking} speak={speak} valueForm={valueForm} />
+        // <h1>Consent</h1>
       )}
     </div>
   )
